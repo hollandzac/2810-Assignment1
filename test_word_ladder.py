@@ -13,14 +13,18 @@ class TestSame(unittest.TestCase):
         same = word_ladder.same('tree', 'been')
         self.assertNotEqual(2,same)
 
-# class TestFind(unittetst.TestCase):
-#     def test_
+class TestFind(unittetst.TestCase):
+    def test_pattern_builder:
+        word = test
+        for i in range(len(word)):
+            testlist += word[:i] + "." + word[i + 1:]
 
 
 class TestBuild(unittest.TestCase):
     def test_search_pattern(self):
         self.assertNotEqual(True, re.search('.old','gold'))
         self.assertEqual(None, re.search('.olg','gold'))
+    def test_build_
 
 
 
