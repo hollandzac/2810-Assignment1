@@ -9,58 +9,59 @@ def same(item, target):
 
 #This function builds a list by searching the words list and if word
 # not in seen or list and the regex search returns !None
-def build(pattern, words, seen, wordlist, noallow):
+def build(pattern, words, seen, wordList, noAllow):
     #the re search '.' character in pattern matches any character except newline
     #will return true as long as all other characters match plus any letter in the
     # '.' postiion
   return [word for word in words
                  if re.search(pattern, word) and word not in seen.keys() and
-                    word not in wordlist and word not in noallow]
+                    word not in wordList and word not in noAllow]
 
 #finds the path to the target word
-def find(word, words, seen, target, path, noallow):
-    wordlist = list()
+def find(word, words, seen, target, path, noAllow):
+    wordList = list()
     #for each letter in curren word replace it with '.' character and call build function
-    #with that pattern append that list to wordlist
+    #with that pattern append that list to wordList
     for i in range(len(word)):
-        wordlist += build(word[:i] + "." + word[i + 1:], words, seen, wordlist, noallow)
+        wordList += build(word[:i] + "." + word[i + 1:], words, seen, wordList, noAllow)
 
     #If no words found to change to remove word from path return false
-    if len(wordlist) == 0:
+    if len(wordList) == 0:
         return False
 
     #sorts word list into tuples of (number of matches with target word, word) in descending order
     # of  matches
-    wordlist = sorted([(same(w, target), w) for w in wordlist], reverse=True)
+    wordList = sorted([(same(w, target), w) for w in wordList], reverse=True)
 
-    # for each tuple in wordlist if match is 1 off length of word a path has been found
+    # for each tuple in wordList if match is 1 off length of word a path has been found
     #add word to path and return true if not add word as key in seen
-    for (match, item) in wordlist:
-        if match >= len(target) - 1:
-            if match == len(target) - 1:
-                path.append(item)
-                return True
+    for (match,item) in wordList:
+        if match == len(target) - 1:
+            path.append(item)
+            return True
         seen[item] = True
 
 
 #if path is not completed appends the closest matching item to path and recursively
 #calls find with the closest match being the new word
 #if the match is no closer retuns false which will remove last entry from path
-    for (match, item) in wordlist:
+    for (match, item) in wordList:
         if match==0:
             return(False)
         path.append(item)
-        if find(item, words, seen, target, path, noallow):
+        if find(item, words, seen, target, path, noAllow):
             return True
         path.pop()
 
 #Takes dictionary file name as input then opens it
-#fname = input("Enter dictionary name: ")#dictionary file name
-file = open('dictionary.txt')
+fname = input("Enter dictionary name: ")#dictionary file name
+while fname[-4:] != '.txt':
+    fname = input("Dictionary must be .txt file : ")
+
+file = open(fname)
 lines = file.readlines() #each line in file
-short = input('Would you like to display shortest path [yes/no]: ')
 #list of words not to be used
-noallow = [x for x in input("Enter list of words not allowed seperated by a white space: ").split()]
+noAllow = [x for x in input("Enter list of words not allowed seperated by a white space: ").split()]
 start = input("Enter start word:") #starting word
 words = [] #list of all words of the same length  in dictionary
 
@@ -79,7 +80,7 @@ seen = {start : True} # dictionary for seen wor
 
 #Once find calculates the path and returns True prints shortest path length and path
 #else no path found
-if find(start, words, seen, target, path, noallow):
+if find(start, words, seen, target, path, noAllow):
   path.append(target)
   print('Shortest path is: ',len(path) - 1, path)
 else:
