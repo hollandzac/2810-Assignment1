@@ -1,5 +1,8 @@
+#! /usr/bin/env python3
 import re
+#Computes the length of a list made by
 def same(item, target):
+  print([c for (c, t) in zip(item, target) if c == t])
   return len([c for (c, t) in zip(item, target) if c == t])
 
 def build(pattern, words, seen, list):
@@ -38,7 +41,7 @@ while True:
       words.append(word)
   target = input("Enter target word:")
   break
-
+print ("hi")
 count = 0
 path = [start]
 seen = {start : True}
@@ -47,4 +50,3 @@ if find(start, words, seen, target, path):
   print(len(path) - 1, path)
 else:
   print("No path found")
-
